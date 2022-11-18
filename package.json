@@ -1,6 +1,6 @@
 {
   "name": "@elrondnetwork/erdjs-network-providers",
-  "version": "0.1.5",
+  "version": "1.1.3",
   "lockfileVersion": 2,
   "requires": true,
   "author": "ElrondNetwork",
@@ -8,7 +8,7 @@
   "files": [
     "out/**/*"
   ],
-  "license": "GPL-3.0-or-later",
+  "license": "MIT",
   "main": "out/index.js",
   "types": "out/index.d.js",
   "packages": {},
