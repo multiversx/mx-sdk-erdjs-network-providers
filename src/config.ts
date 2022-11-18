@@ -1,4 +1,5 @@
 import { IPagination } from "./interface";
+import { defaultAddressPrefix } from "./constants"
 
 const JSONbig = require("json-bigint")({ constructorAction: 'ignore' });
 
@@ -16,3 +17,7 @@ export const defaultPagination: IPagination = {
     from: 0,
     size: 100
 };
+
+export const defaultProviderOptions = {
+    addressPrefix: defaultAddressPrefix
+}

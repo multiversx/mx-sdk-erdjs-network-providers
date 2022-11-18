@@ -128,3 +128,5 @@ export interface ITransaction {
 }
 
 export interface IAddress { bech32(): string; }
+
+export interface ProviderOptions { addressPrefix: string; }

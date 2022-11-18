@@ -5,9 +5,7 @@ All notable changes will be documented in this file.
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
 ## [1.1.3]
- - [Removed HRP](https://github.com/ElrondNetwork/elrond-sdk-erdjs-network-providers/pull/30)
- - [Removed Address.fromPubkey()](https://github.com/ElrondNetwork/elrond-sdk-erdjs-network-providers/pull/30)
- - 
+ - [Removed `erd` HRP obligation, making it optional and setable through `ProviderOptions`](https://github.com/ElrondNetwork/elrond-sdk-erdjs-network-providers/pull/30)
 
 ## [1.1.2]
  - [Add Address.toString()](https://github.com/ElrondNetwork/elrond-sdk-erdjs-network-providers/pull/27)
