@@ -1,11 +1,6 @@
 import * as bech32 from "bech32";
 import { IAddress } from "./interface";
 
-/**
- * The human-readable-part of the bech32 addresses.
- */
-const HRP = "erd";
-
 export class Address implements IAddress {
     private readonly value: string;
 
@@ -13,18 +8,14 @@ export class Address implements IAddress {
         this.value = value;
     }
 
-    static fromPubkey(pubkey: Buffer): IAddress {
+    static fromPubkey(pubkey: Buffer, prefix: string): IAddress {
         let words = bech32.toWords(pubkey);
-        let address = bech32.encode(HRP, words);
+        let address = bech32.encode(prefix, words);
         return new Address(address);
     }
 
     bech32(): string {
         return this.value;
-    }
-
-    toString() {
-        return this.bech32();
     }
 }
 
