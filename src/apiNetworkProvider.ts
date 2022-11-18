@@ -15,7 +15,7 @@ import { defaultAxiosConfig, defaultPagination } from "./config";
 import { NetworkStatus } from "./networkStatus";
 import { ContractQueryResponse } from "./contractQueryResponse";
 import { ContractQueryRequest } from "./contractQueryRequest";
-import {PairOnNetwork} from "./pairs";
+import { PairOnNetwork } from "./pairs";
 
 // TODO: Find & remove duplicate code between "ProxyNetworkProvider" and "ApiNetworkProvider".
 export class ApiNetworkProvider implements INetworkProvider {
@@ -73,7 +73,7 @@ export class ApiNetworkProvider implements INetworkProvider {
         let url = `accounts/${address.bech32()}/nfts?${this.buildPaginationParams(pagination)}`;
         let response: any[] = await this.doGetGeneric(url);
         let tokens = response.map(item => NonFungibleTokenOfAccountOnNetwork.fromApiHttpResponse(item));
-        
+
         // TODO: Fix sorting
         tokens.sort((a, b) => a.identifier.localeCompare(b.identifier));
         return tokens;
