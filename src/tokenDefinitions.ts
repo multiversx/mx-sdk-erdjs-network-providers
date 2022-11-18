@@ -53,7 +53,7 @@ export class DefinitionOfFungibleTokenOnNetwork {
         result.identifier = identifier;
         result.name = tokenName.toString();
         result.ticker = identifier;
-        result.owner = new Address(owner.toString("hex"));
+        result.owner = Address.fromPubkey(owner);
         result.decimals = properties.NumDecimals.toNumber();
         result.supply = new BigNumber(supply.toString()).shiftedBy(-result.decimals);
         result.isPaused = properties.IsPaused;
@@ -112,7 +112,7 @@ export class DefinitionOfTokenCollectionOnNetwork {
         result.type = tokenType.toString();
         result.name = tokenName.toString();
         result.ticker = collection;
-        result.owner = new Address(owner.toString("hex"));
+        result.owner = Address.fromPubkey(owner);
         result.decimals = properties.NumDecimals.toNumber();
         result.canPause = properties.CanPause;
         result.canFreeze = properties.CanFreeze;
