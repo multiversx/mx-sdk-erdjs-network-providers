@@ -6,7 +6,7 @@ export class DefinitionOfFungibleTokenOnNetwork {
     identifier: string = "";
     name: string = "";
     ticker: string = "";
-    owner: string = "";//IAddress = new Address("");
+    owner: IAddress = new Address("");
     decimals: number = 0;
     supply: BigNumber = new BigNumber(0);
     isPaused: boolean = false;
@@ -25,7 +25,7 @@ export class DefinitionOfFungibleTokenOnNetwork {
         result.identifier = payload.identifier || "";
         result.name = payload.name || "";
         result.ticker = payload.ticker || "";
-        result.owner = payload.owner.toString("hex");//new Address(payload.owner || "");
+        result.owner = new Address(payload.owner || "");
         result.decimals = payload.decimals || 0;
         result.supply = new BigNumber(payload.supply || "0");
         result.isPaused = payload.isPaused || false;
@@ -53,7 +53,7 @@ export class DefinitionOfFungibleTokenOnNetwork {
         result.identifier = identifier;
         result.name = tokenName.toString();
         result.ticker = identifier;
-        result.owner = owner.toString("hex");
+        result.owner = new Address(owner.toString("hex"));
         result.decimals = properties.NumDecimals.toNumber();
         result.supply = new BigNumber(supply.toString()).shiftedBy(-result.decimals);
         result.isPaused = properties.IsPaused;
@@ -74,7 +74,7 @@ export class DefinitionOfTokenCollectionOnNetwork {
     type: string = "";
     name: string = "";
     ticker: string = "";
-    owner: string = "";//IAddress = new Address("");
+    owner: IAddress = new Address("");
     decimals: number = 0;
     canPause: boolean = false;
     canFreeze: boolean = false;
@@ -88,7 +88,7 @@ export class DefinitionOfTokenCollectionOnNetwork {
         result.type = payload.type || "";
         result.name = payload.name || "";
         result.ticker = payload.ticker || "";
-        result.owner = payload.owner.toString("hex");//new Address(payload.owner || "");
+        result.owner = new Address(payload.owner || "");
         result.decimals = payload.decimals || 0;
         result.canPause = payload.canPause || false;
         result.canFreeze = payload.canFreeze || false;
@@ -112,7 +112,7 @@ export class DefinitionOfTokenCollectionOnNetwork {
         result.type = tokenType.toString();
         result.name = tokenName.toString();
         result.ticker = collection;
-        result.owner = owner.toString("hex");//Address.fromPubkey(owner);
+        result.owner = new Address(owner.toString("hex"));
         result.decimals = properties.NumDecimals.toNumber();
         result.canPause = properties.CanPause;
         result.canFreeze = properties.CanFreeze;

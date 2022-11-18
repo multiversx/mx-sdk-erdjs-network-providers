@@ -8,8 +8,8 @@ describe("test primitives", function () {
         let alicePubkey = Buffer.from("0139472eff6886771a982f3083da5d421f24c29181e63888228dc81ca60d69e1", "hex");
         let bobPubkey = Buffer.from("8049d639e5a6980d1cd2392abcce41029cda74a1563523a202f09641cc2618f8", "hex");
 
-        assert.equal(new Address(aliceBech32).bech32(), Address.fromPubkey(alicePubkey, "erd").bech32());
-        assert.equal(new Address(bobBech32).bech32(), Address.fromPubkey(bobPubkey, "erd").bech32());
+        assert.equal(new Address(aliceBech32).toString(), aliceBech32);
+        assert.equal(new Address(bobBech32).toString(), bobBech32);
     });
 });
 

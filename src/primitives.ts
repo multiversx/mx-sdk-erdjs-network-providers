@@ -8,14 +8,12 @@ export class Address implements IAddress {
         this.value = value;
     }
 
-    static fromPubkey(pubkey: Buffer, prefix: string): IAddress {
-        let words = bech32.toWords(pubkey);
-        let address = bech32.encode(prefix, words);
-        return new Address(address);
-    }
-
     bech32(): string {
         return this.value;
+    }
+
+    toString() {
+        return this.bech32();
     }
 }
 
