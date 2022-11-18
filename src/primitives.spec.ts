@@ -10,8 +10,6 @@ describe("test primitives", function () {
 
         assert.equal(new Address(aliceBech32).bech32(), Address.fromPubkey(alicePubkey, "erd").bech32());
         assert.equal(new Address(bobBech32).bech32(), Address.fromPubkey(bobPubkey, "erd").bech32());
-        assert.equal(new Address(aliceBech32).toString(), aliceBech32);
-        assert.equal(new Address(bobBech32).toString(), bobBech32);
     });
 });
 
