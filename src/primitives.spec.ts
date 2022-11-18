@@ -10,4 +10,3 @@ describe("test primitives", function () {
         assert.equal(new Address(bobBech32).toString(), bobBech32);
     });
 });
-
