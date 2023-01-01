@@ -206,7 +206,7 @@ export class ApiNetworkProvider implements INetworkProvider {
         }
 
         let errorData = error.response.data;
-        let originalErrorMessage = errorData.error || errorData.message || JSON.stringify(errorData);
+        let originalErrorMessage = errorData.message || errorData.error || JSON.stringify(errorData);
         throw new ErrNetworkProvider(resourceUrl, originalErrorMessage, error);
     }
 }
