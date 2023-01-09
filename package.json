@@ -1,5 +1,5 @@
 {
-  "name": "@elrondnetwork/erdjs-network-providers",
+  "name": "@multiversx/erdjs-network-providers",
   "version": "1.2.1",
   "lockfileVersion": 2,
   "requires": true,
