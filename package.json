@@ -1,10 +1,10 @@
 {
-  "name": "@multiversx/erdjs-network-providers",
+  "name": "@multiversx/sdk-js-network-providers",
   "version": "1.2.1",
   "lockfileVersion": 2,
   "requires": true,
   "author": "MultiversX",
-  "description": "Network Provider (API, Gateway) components (compatible with erdjs)",
+  "description": "Network Provider (API, Gateway) components (compatible with @multiversx/sdk-js)",
   "files": [
     "out/**/*"
   ],
