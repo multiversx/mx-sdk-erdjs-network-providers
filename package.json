@@ -1,10 +1,10 @@
 {
-  "name": "@elrondnetwork/erdjs-network-providers",
-  "version": "1.2.0",
+  "name": "@multiversx/sdk-network-providers",
+  "version": "1.2.1",
   "lockfileVersion": 2,
   "requires": true,
-  "author": "ElrondNetwork",
-  "description": "Network Provider (API, Gateway) components (compatible with erdjs)",
+  "author": "MultiversX",
+  "description": "Network Provider (API, Gateway) components (compatible with @multiversx/sdk-core)",
   "files": [
     "out/**/*"
   ],
