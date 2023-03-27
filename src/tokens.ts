@@ -32,6 +32,7 @@ export class NonFungibleTokenOfAccountOnNetwork {
     royalties: BigNumber = new BigNumber(0);
     assets: string[] = [];
     balance: BigNumber = new BigNumber(0);
+    rawResponse: any = {};
 
     constructor(init?: Partial<NonFungibleTokenOfAccountOnNetwork>) {
         Object.assign(this, init);
@@ -82,6 +83,7 @@ export class NonFungibleTokenOfAccountOnNetwork {
         result.royalties = new BigNumber(payload.royalties || 0);
         result.assets = payload.assets || [];
         result.balance = new BigNumber(payload.balance || 0);
+        result.rawResponse = payload;
 
         return result;
     }

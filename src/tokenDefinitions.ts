@@ -19,6 +19,7 @@ export class DefinitionOfFungibleTokenOnNetwork {
     canWipe: boolean = false;
     canAddSpecialRoles: boolean = false;
     assets: Record<string, any> = {};
+    rawResponse: any = {};
 
     static fromApiHttpResponse(payload: any): DefinitionOfFungibleTokenOnNetwork {
         let result = new DefinitionOfFungibleTokenOnNetwork();
@@ -38,6 +39,7 @@ export class DefinitionOfFungibleTokenOnNetwork {
         result.canFreeze = payload.canFreeze || false;
         result.canWipe = payload.canWipe || false;
         result.assets = payload.assets || {};
+        result.rawResponse = payload;
 
         return result;
     }
@@ -86,6 +88,7 @@ export class DefinitionOfTokenCollectionOnNetwork {
     canAddSpecialRoles: boolean = false;
     canTransferNftCreateRole: boolean = false;
     canCreateMultiShard: boolean = false;
+    rawResponse: any = {};
 
     static fromApiHttpResponse(payload: any): DefinitionOfTokenCollectionOnNetwork {
         let result = new DefinitionOfTokenCollectionOnNetwork();
@@ -100,6 +103,7 @@ export class DefinitionOfTokenCollectionOnNetwork {
         result.canFreeze = payload.canFreeze || false;
         result.canWipe = payload.canWipe || false;
         result.canTransferNftCreateRole = payload.canTransferNftCreateRole || false;
+        result.rawResponse = payload;
 
         return result;
     }
