@@ -1,6 +1,6 @@
 {
   "name": "@multiversx/sdk-network-providers",
-  "version": "2.0.0",
+  "version": "2.1.0-beta.0",
   "lockfileVersion": 2,
   "requires": true,
   "author": "MultiversX",
