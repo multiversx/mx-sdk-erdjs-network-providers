@@ -1,6 +1,6 @@
 {
   "name": "@multiversx/sdk-network-providers",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "lockfileVersion": 2,
   "requires": true,
   "author": "MultiversX",
@@ -13,7 +13,7 @@
   "types": "out/index.d.js",
   "packages": {},
   "dependencies": {
-    "axios": "0.24.0",
+    "axios": "1.6.1",
     "bech32": "1.1.4",
     "bignumber.js": "9.0.1",
     "buffer": "6.0.3",
