@@ -14,8 +14,42 @@ describe("test network providers on devnet: Proxy and API", function () {
     let dan = new Address("erd1kyaqzaprcdnv4luvanah0gfxzzsnpaygsy6pytrexll2urtd05ts9vegu7");
     const MAX_NUMBER_OF_ITEMS_BY_DEFAULT = 20;
 
-    let apiProvider: INetworkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com", { timeout: 10000 });
-    let proxyProvider: INetworkProvider = new ProxyNetworkProvider("https://devnet-gateway.multiversx.com", { timeout: 10000 });
+    const apiProvider: INetworkProvider = new ApiNetworkProvider({
+        baseUrl: "https://devnet-api.multiversx.com",
+        httpProvider: createHttpProvider()
+    });
+
+    const proxyProvider: INetworkProvider = new ProxyNetworkProvider({
+        baseUrl: "https://devnet-gateway.multiversx.com",
+        httpProvider: createHttpProvider()
+    });
+
+    function createHttpProvider() {
+        const axios = require("axios").default;
+        const jsonBig = require("json-bigint")({ constructorAction: "ignore" });
+
+        const axiosConfig = {
+            timeout: 10000,
+            // See: https://github.com/axios/axios/issues/983 regarding transformResponse
+            transformResponse: [
+                function (data: any) {
+                    return jsonBig.parse(data);
+                }
+            ],
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+
+        return {
+            async get(url: string) {
+                return (await axios.get(url, axiosConfig)).data;
+            },
+            async post(url: string, payload: any) {
+                return (await axios.post(url, payload, axiosConfig)).data;
+            }
+        };
+    }
 
     it("should have same response for getNetworkConfig()", async function () {
         let apiResponse = await apiProvider.getNetworkConfig();
@@ -300,39 +334,20 @@ describe("test network providers on devnet: Proxy and API", function () {
         assert.deepEqual(apiResponse.getReturnDataParts(), proxyResponse.getReturnDataParts());
     });
 
-    it("should handle events data on < Sirius and >= Sirius", async function () {
+    it("should handle events 'data' and 'additionalData'", async function () {
         this.timeout(50000);
 
-        const beforeSiriusApiProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com");
-        const beforeSiriusProxyProvider = new ProxyNetworkProvider("https://devnet-gateway.multiversx.com");
+        const apiResponse = await apiProvider.getTransaction("51e53c6345c25fc4a454e64b96f43812e4a6cf3d01bbe4384da39e562b136aac");
+        const proxyResponse = await proxyProvider.getTransaction("51e53c6345c25fc4a454e64b96f43812e4a6cf3d01bbe4384da39e562b136aac");
 
-        // We use the Testnet services, since they are backed by nodes with version >= Sirius (November 2023).
-        const afterSiriusApiProvider = new ApiNetworkProvider("https://testnet-api.multiversx.com");
-        const afterSiriusProxyProvider = new ProxyNetworkProvider("https://testnet-gateway.multiversx.com");
+        assert.equal(apiResponse.contractResults.items[0].logs.events[1].data, Buffer.from("AAAAAAAAA9sAAAA=", "base64").toString());
+        assert.equal(proxyResponse.logs.events[1].data, Buffer.from("AAAAAAAAA9sAAAA=", "base64").toString());
 
-        const beforeSiriusApiResponse = await beforeSiriusApiProvider.getTransaction("51e53c6345c25fc4a454e64b96f43812e4a6cf3d01bbe4384da39e562b136aac");
-        const beforeSiriusProxyResponse = await beforeSiriusProxyProvider.getTransaction("51e53c6345c25fc4a454e64b96f43812e4a6cf3d01bbe4384da39e562b136aac");
+        assert.deepEqual(apiResponse.contractResults.items[0].logs.events[1].dataPayload, TransactionEventData.fromBase64("AAAAAAAAA9sAAAA="));
+        assert.deepEqual(proxyResponse.logs.events[1].dataPayload, TransactionEventData.fromBase64("AAAAAAAAA9sAAAA="));
 
-        const afterSiriusApiResponse = await afterSiriusApiProvider.getTransaction("532087e5021c9ab8be8a4db5ad843cfe0610761f6334d9693b3765992fd05f67");
-        // Contract result of "5320...5f67":
-        const afterSiriusProxyResponse = await afterSiriusProxyProvider.getTransaction("4bb22e85895b41bc3cd195079afa761cc4b430fb4ea19a6862f083de53f110ab");
-
-        // Before Sirius
-        assert.equal(beforeSiriusApiResponse.logs.events[0].data, "@6f7574206f662066756e6473");
-        assert.equal(beforeSiriusProxyResponse.logs.events[0].data, "@6f7574206f662066756e6473");
-
-        assert.deepEqual(beforeSiriusApiResponse.logs.events[0].dataPayload, TransactionEventData.fromBase64("QDZmNzU3NDIwNmY2NjIwNjY3NTZlNjQ3Mw=="));
-        assert.deepEqual(beforeSiriusProxyResponse.logs.events[0].dataPayload, TransactionEventData.fromBase64("QDZmNzU3NDIwNmY2NjIwNjY3NTZlNjQ3Mw=="));
-
-        // After Sirius
-        assert.equal(afterSiriusApiResponse.contractResults.items[0].logs.events[1].data, Buffer.from("AAAAAAAAA9sAAAA=", "base64").toString());
-        assert.equal(afterSiriusProxyResponse.logs.events[1].data, Buffer.from("AAAAAAAAA9sAAAA=", "base64").toString());
-
-        assert.deepEqual(afterSiriusApiResponse.contractResults.items[0].logs.events[1].dataPayload, TransactionEventData.fromBase64("AAAAAAAAA9sAAAA="));
-        assert.deepEqual(afterSiriusProxyResponse.logs.events[1].dataPayload, TransactionEventData.fromBase64("AAAAAAAAA9sAAAA="));
-
-        assert.deepEqual(afterSiriusApiResponse.contractResults.items[0].logs.events[1].additionalData, [TransactionEventData.fromBase64("AAAAAAAAA9sAAAA=")]);
-        assert.deepEqual(afterSiriusProxyResponse.logs.events[1].additionalData, [TransactionEventData.fromBase64("AAAAAAAAA9sAAAA=")]);
+        assert.deepEqual(apiResponse.contractResults.items[0].logs.events[1].additionalData, [TransactionEventData.fromBase64("AAAAAAAAA9sAAAA=")]);
+        assert.deepEqual(proxyResponse.logs.events[1].additionalData, [TransactionEventData.fromBase64("AAAAAAAAA9sAAAA=")]);
     });
 });
 

@@ -1,11 +1,9 @@
-import axios, { AxiosRequestConfig } from "axios";
 import { AccountOnNetwork, GuardianData } from "./accounts";
-import { defaultAxiosConfig } from "./config";
 import { EsdtContractAddress } from "./constants";
 import { ContractQueryRequest } from "./contractQueryRequest";
 import { ContractQueryResponse } from "./contractQueryResponse";
 import { ErrContractQuery, ErrNetworkProvider } from "./errors";
-import { IAddress, IContractQuery, INetworkProvider, IPagination, ITransaction } from "./interface";
+import { IAddress, IContractQuery, IHttpProvider, INetworkProvider, IPagination, ITransaction } from "./interface";
 import { NetworkConfig } from "./networkConfig";
 import { NetworkGeneralStatistics } from "./networkGeneralStatistics";
 import { NetworkStake } from "./networkStake";
@@ -17,12 +15,12 @@ import { TransactionStatus } from "./transactionStatus";
 
 // TODO: Find & remove duplicate code between "ProxyNetworkProvider" and "ApiNetworkProvider".
 export class ProxyNetworkProvider implements INetworkProvider {
-    private url: string;
-    private config: AxiosRequestConfig;
+    private baseUrl: string;
+    private httpProvider: IHttpProvider;
 
-    constructor(url: string, config?: AxiosRequestConfig) {
-        this.url = url;
-        this.config = { ...defaultAxiosConfig, ...config };
+    constructor(options: { baseUrl: string, httpProvider: IHttpProvider }) {
+        this.baseUrl = options.baseUrl;
+        this.httpProvider = options.httpProvider;
     }
 
     async getNetworkConfig(): Promise<NetworkConfig> {
@@ -194,30 +192,22 @@ export class ProxyNetworkProvider implements INetworkProvider {
     }
 
     private async doGet(resourceUrl: string): Promise<any> {
-        let url = `${this.url}/${resourceUrl}`;
+        const url = `${this.baseUrl}/${resourceUrl}`;
 
         try {
-            let response = await axios.get(url, this.config);
-            let payload = response.data.data;
-            return payload;
+            const response = await this.httpProvider.get(url);
+            return response.data;
         } catch (error) {
             this.handleApiError(error, resourceUrl);
         }
     }
 
     private async doPost(resourceUrl: string, payload: any): Promise<any> {
-        let url = `${this.url}/${resourceUrl}`;
+        const url = `${this.baseUrl}/${resourceUrl}`;
 
         try {
-            let response = await axios.post(url, payload, {
-                ...this.config,
-                headers: {
-                    "Content-Type": "application/json",
-                    ...this.config.headers,
-                },
-            });
-            let responsePayload = response.data.data;
-            return responsePayload;
+            const response = await this.httpProvider.post(url, payload);
+            return response.data;
         } catch (error) {
             this.handleApiError(error, resourceUrl);
         }
