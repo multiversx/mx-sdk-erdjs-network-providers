@@ -6,8 +6,8 @@ The default classes from this package should **only be used as a starting point*
 
 ## Documentation
 
- - [cookbook](https://docs.multiversx.com/sdk-and-tools/erdjs/erdjs-cookbook)
- - [extending the components](https://docs.multiversx.com/sdk-and-tools/erdjs/extending-erdjs)
+ - [cookbook](https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-versions)
+ - [extending the components](https://docs.multiversx.com/sdk-and-tools/sdk-js/extending-sdk-js)
 
 ## Distribution
 
