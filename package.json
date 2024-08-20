@@ -1,6 +1,6 @@
 {
   "name": "@multiversx/sdk-network-providers",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "lockfileVersion": 2,
   "requires": true,
   "author": "MultiversX",
@@ -32,7 +32,7 @@
     "typescript": "4.1.2"
   },
   "peerDependencies": {
-    "axios": "^1.6.8"
+    "axios": "^1.7.4"
   },
   "scripts": {
     "compile": "tsc -p tsconfig.json",
