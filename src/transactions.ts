@@ -6,7 +6,7 @@ import { TransactionReceipt } from "./transactionReceipt";
 import { TransactionStatus } from "./transactionStatus";
 
 export function prepareTransactionForBroadcasting(transaction: ITransaction | ITransactionNext): any {
-    if ("toSendable" in transaction){
+    if ("toSendable" in transaction) {
         return transaction.toSendable();
     }
 
@@ -15,12 +15,8 @@ export function prepareTransactionForBroadcasting(transaction: ITransaction | IT
         value: transaction.value.toString(),
         receiver: transaction.receiver,
         sender: transaction.sender,
-        senderUsername: transaction.senderUsername
-            ? Buffer.from(transaction.senderUsername).toString("base64")
-            : undefined,
-        receiverUsername: transaction.receiverUsername
-            ? Buffer.from(transaction.receiverUsername).toString("base64")
-            : undefined,
+        senderUsername: transaction.senderUsername ? Buffer.from(transaction.senderUsername).toString("base64") : undefined,
+        receiverUsername: transaction.receiverUsername ? Buffer.from(transaction.receiverUsername).toString("base64") : undefined,
         gasPrice: Number(transaction.gasPrice),
         gasLimit: Number(transaction.gasLimit),
         data: transaction.data.length === 0 ? undefined : Buffer.from(transaction.data).toString("base64"),
@@ -29,14 +25,9 @@ export function prepareTransactionForBroadcasting(transaction: ITransaction | IT
         options: transaction.options,
         guardian: transaction.guardian || undefined,
         signature: Buffer.from(transaction.signature).toString("hex"),
-        guardianSignature:
-            transaction.guardianSignature.length === 0
-                ? undefined
-                : Buffer.from(transaction.guardianSignature).toString("hex"),
+        guardianSignature: transaction.guardianSignature.length === 0 ? undefined : Buffer.from(transaction.guardianSignature).toString("hex"),
         relayer: transaction.relayer ? transaction.relayer : undefined,
-        innerTransactions: transaction.innerTransactions
-            ? transaction.innerTransactions.map((tx) => prepareTransactionForBroadcasting(tx))
-            : undefined,
+        innerTransactions: transaction.innerTransactions ? transaction.innerTransactions.map((tx) => prepareTransactionForBroadcasting(tx)) : undefined,
     };
 }
 
@@ -136,9 +127,7 @@ export class TransactionOnNetwork {
             options: resource.options || 0,
             guardian: resource.guardian || "",
             signature: Buffer.from(resource.signature, "hex"),
-            guardianSignature: resource.guardianSignature
-                ? Buffer.from(resource.guardianSignature, "hex")
-                : Buffer.from([]),
+            guardianSignature: resource.guardianSignature ? Buffer.from(resource.guardianSignature, "hex") : Buffer.from([]),
             relayer: resource.relayer,
         };
     }
