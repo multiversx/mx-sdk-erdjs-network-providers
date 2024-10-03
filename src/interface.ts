@@ -151,5 +151,5 @@ export interface ITransactionNext {
     signature: Uint8Array;
     guardianSignature: Uint8Array;
     relayer?: string;
-    innerTransactions?: ITransaction[];
+    innerTransactions?: ITransactionNext[];
   }

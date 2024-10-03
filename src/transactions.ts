@@ -15,8 +15,12 @@ export function prepareTransactionForBroadcasting(transaction: ITransaction | IT
         value: transaction.value.toString(),
         receiver: transaction.receiver,
         sender: transaction.sender,
-        senderUsername: transaction.senderUsername ? Buffer.from(transaction.senderUsername).toString("base64") : undefined,
-        receiverUsername: transaction.receiverUsername ? Buffer.from(transaction.receiverUsername).toString("base64") : undefined,
+        senderUsername: transaction.senderUsername
+            ? Buffer.from(transaction.senderUsername).toString("base64")
+            : undefined,
+        receiverUsername: transaction.receiverUsername
+            ? Buffer.from(transaction.receiverUsername).toString("base64")
+            : undefined,
         gasPrice: Number(transaction.gasPrice),
         gasLimit: Number(transaction.gasLimit),
         data: transaction.data.length === 0 ? undefined : Buffer.from(transaction.data).toString("base64"),
@@ -25,12 +29,15 @@ export function prepareTransactionForBroadcasting(transaction: ITransaction | IT
         options: transaction.options,
         guardian: transaction.guardian || undefined,
         signature: Buffer.from(transaction.signature).toString("hex"),
-        guardianSignature: transaction.guardianSignature.length === 0 ? undefined : Buffer.from(transaction.guardianSignature).toString("hex"),
+        guardianSignature:
+            transaction.guardianSignature.length === 0
+                ? undefined
+                : Buffer.from(transaction.guardianSignature).toString("hex"),
         relayer: transaction.relayer ? transaction.relayer : undefined,
-            innerTransactions: transaction.innerTransactions
-                ? transaction.innerTransactions.map((tx) => prepareTransactionForBroadcasting(tx))
-                : undefined,
-    }
+        innerTransactions: transaction.innerTransactions
+            ? transaction.innerTransactions.map((tx) => prepareTransactionForBroadcasting(tx))
+            : undefined,
+    };
 }
 
 export class TransactionOnNetwork {
@@ -58,6 +65,7 @@ export class TransactionOnNetwork {
     receipt: TransactionReceipt = new TransactionReceipt();
     contractResults: ContractResults = new ContractResults([]);
     logs: TransactionLogs = new TransactionLogs();
+    innerTransactions: ITransactionNext[] = [];
 
     constructor(init?: Partial<TransactionOnNetwork>) {
         Object.assign(this, init);
@@ -106,8 +114,33 @@ export class TransactionOnNetwork {
 
         result.receipt = TransactionReceipt.fromHttpResponse(response.receipt || {});
         result.logs = TransactionLogs.fromHttpResponse(response.logs || {});
+        result.innerTransactions = (response.innerTransactions || []).map(this.innerTransactionFromHttpResource);
 
         return result;
+    }
+
+    private static innerTransactionFromHttpResource(resource: any): ITransactionNext {
+        return {
+            nonce: BigInt(resource.nonce || 0),
+            value: BigInt(resource.value || 0),
+            receiver: resource.receiver,
+            sender: resource.sender,
+            // We discard "senderUsername" and "receiverUsername" (to avoid future discrepancies between Proxy and API):
+            senderUsername: "",
+            receiverUsername: "",
+            gasPrice: BigInt(resource.gasPrice),
+            gasLimit: BigInt(resource.gasLimit),
+            data: Buffer.from(resource.data || "", "base64"),
+            chainID: resource.chainID,
+            version: resource.version,
+            options: resource.options || 0,
+            guardian: resource.guardian || "",
+            signature: Buffer.from(resource.signature, "hex"),
+            guardianSignature: resource.guardianSignature
+                ? Buffer.from(resource.guardianSignature, "hex")
+                : Buffer.from([]),
+            relayer: resource.relayer,
+        };
     }
 
     getDateTime(): Date {
