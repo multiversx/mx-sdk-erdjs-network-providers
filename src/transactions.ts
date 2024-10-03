@@ -1,9 +1,9 @@
-import { TransactionStatus } from "./transactionStatus";
 import { ContractResults } from "./contractResults";
-import { Address } from "./primitives";
 import { IAddress, ITransaction, ITransactionNext } from "./interface";
+import { Address } from "./primitives";
 import { TransactionLogs } from "./transactionLogs";
 import { TransactionReceipt } from "./transactionReceipt";
+import { TransactionStatus } from "./transactionStatus";
 
 export function prepareTransactionForBroadcasting(transaction: ITransaction | ITransactionNext): any {
     if ("toSendable" in transaction){
@@ -26,6 +26,10 @@ export function prepareTransactionForBroadcasting(transaction: ITransaction | IT
         guardian: transaction.guardian || undefined,
         signature: Buffer.from(transaction.signature).toString("hex"),
         guardianSignature: transaction.guardianSignature.length === 0 ? undefined : Buffer.from(transaction.guardianSignature).toString("hex"),
+        relayer: transaction.relayer ? transaction.relayer : undefined,
+            innerTransactions: transaction.innerTransactions
+                ? transaction.innerTransactions.map((tx) => prepareTransactionForBroadcasting(tx))
+                : undefined,
     }
 }
 
