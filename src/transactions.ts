@@ -71,6 +71,10 @@ export class TransactionOnNetwork {
             result.isCompleted = result.status.isSuccessful() || result.status.isFailed();
         }
 
+        result.innerTransactions = (response.innerTransactions || []).map((item: any) =>
+            TransactionOnNetwork.fromProxyHttpResponse(item.hash, item),
+        );
+
         return result;
     }
 
@@ -78,6 +82,11 @@ export class TransactionOnNetwork {
         let result = TransactionOnNetwork.fromHttpResponse(txHash, response);
         result.contractResults = ContractResults.fromApiHttpResponse(response.results || []);
         result.isCompleted = !result.status.isPending();
+
+        result.innerTransactions = (response.innerTransactions || []).map((item: any) =>
+            TransactionOnNetwork.fromApiHttpResponse(item.hash, item),
+        );
+
         return result;
     }
 
@@ -105,31 +114,8 @@ export class TransactionOnNetwork {
 
         result.receipt = TransactionReceipt.fromHttpResponse(response.receipt || {});
         result.logs = TransactionLogs.fromHttpResponse(response.logs || {});
-        result.innerTransactions = (response.innerTransactions || []).map(this.innerTransactionFromHttpResource);
 
         return result;
-    }
-
-    private static innerTransactionFromHttpResource(resource: any): ITransactionNext {
-        return {
-            nonce: BigInt(resource.nonce || 0),
-            value: BigInt(resource.value || 0),
-            receiver: resource.receiver,
-            sender: resource.sender,
-            // We discard "senderUsername" and "receiverUsername" (to avoid future discrepancies between Proxy and API):
-            senderUsername: "",
-            receiverUsername: "",
-            gasPrice: BigInt(resource.gasPrice),
-            gasLimit: BigInt(resource.gasLimit),
-            data: Buffer.from(resource.data || "", "base64"),
-            chainID: resource.chainID,
-            version: resource.version,
-            options: resource.options || 0,
-            guardian: resource.guardian || "",
-            signature: Buffer.from(resource.signature, "hex"),
-            guardianSignature: resource.guardianSignature ? Buffer.from(resource.guardianSignature, "hex") : Buffer.from([]),
-            relayer: resource.relayer,
-        };
     }
 
     getDateTime(): Date {
