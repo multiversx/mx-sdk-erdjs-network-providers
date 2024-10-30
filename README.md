@@ -1,29 +1,11 @@
-# MultiversX SDK for JavaScript and TypeScript: Network Providers
+# This package was integrated into [sdk-core](https://www.npmjs.com/package/@multiversx/sdk-core) and will soon be deprecated
+To utilize the functionality from the unified @multiversx/sdk-core library, please update the existing import statements within your project.
 
-Network Provider (API, Gateway) components (compatible with @multiversx/sdk-core).
-
-The default classes from this package should **only be used as a starting point**. As your dApp matures, make sure you **switch to using your own network provider**, tailored to your requirements (whether deriving from the default ones or writing a new one, from scratch) that directly interacts with the MultiversX API (or Gateway). Regarding this, please see the documentation referenced below.
-
-## Documentation
-
- - [cookbook](https://docs.multiversx.com/sdk-and-tools/sdk-js/sdk-js-cookbook-versions)
- - [extending the components](https://docs.multiversx.com/sdk-and-tools/sdk-js/extending-sdk-js)
-
-## Distribution
-
-[npm](https://www.npmjs.com/package/@multiversx/sdk-network-providers)
-
-## Installation
-
+For example:
+``` 
+import { ProxyNetworkProvider } from "@multiversx/sdk-network-providers";
 ```
-npm install @multiversx/sdk-network-providers
+should be changed to:
 ```
-
-### Building the library
-
-In order to compile the library, run the following:
-
-```
-npm install
-npm run compile
+import { ProxyNetworkProvider } from "@multiversx/sdk-core";
 ```
